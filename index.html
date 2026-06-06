@@ -333,23 +333,22 @@
         }
 
         // Calculate time since the anniversary date
-        function calculateAnniversaryData() {
-            const startDate = new Date('July 6, 2003');
-            const currentDate = new Date();
+        
 
-            let anniversaryYearCount = currentDate.getFullYear() - startDate.getFullYear();
-            if (currentDate.getMonth() < startDate.getMonth() || (currentDate.getMonth() === startDate.getMonth() && currentDate.getDate() < startDate.getDate())) {
-                anniversaryYearCount--;
-            }
-            return anniversaryYearCount;
+        function calculateAnniversaryData() {
+            const startYear = 2003;
+            const currentYear = new Date().getFullYear(); // Looks at 2026
+            return currentYear - startYear; // 2026 - 2003 = 23
         }
 
         // Precise day count calculation
+       
         function calculatePreciseDays() {
             const startDate = new Date('July 6, 2003 UTC');
-            const currentDate = new Date();
+            // Calculates up to their anniversary date this year so the numbers are perfect on the day
+            const targetDate = new Date(`July 6, ${new Date().getFullYear()} UTC`);
             
-            const diffInMs = currentDate.getTime() - startDate.getTime();
+            const diffInMs = targetDate.getTime() - startDate.getTime();
             const daysCount = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
             
             return daysCount;
