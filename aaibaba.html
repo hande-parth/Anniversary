@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Congratulations on Your Anniversary, Mom & Dad!</title>
+    <!-- Google Fonts for aesthetic appeal -->
+    <link href="[https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:wght@300;400;600&display=swap](https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:wght@300;400;600&display=swap)" rel="stylesheet">
+    <style>
+        /* Base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Cormorant Garamond', serif;
+            background-color: #fdfaf5; /* Creamy background */
+            color: #4a4a4a;
+            overflow-x: hidden; /* Prevent horizontal scrolling from animations */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        /* Particles container (floating elements) */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none; /* Let clicks pass through */
+            z-index: 0;
+        }
+
+        /* Particle keyframes for floating and opacity */
+        @keyframes particleFloat {
+            0% { transform: translateY(110vh) translateX(0) scale(1); opacity: 0; }
+            10% { opacity: 1; }
+            50% { transform: translateY(50vh) translateX(20px) scale(1.1); opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-10vh) translateX(0) scale(1); opacity: 0; }
+        }
+
+        .particle {
+            position: absolute;
+            background-color: rgba(212, 175, 55, 0.5); /* Semi-transparent gold */
+            border-radius: 50%;
+            opacity: 0;
+            animation: particleFloat infinite linear;
+        }
+
+        /* Content container - Main visual area */
+        .container {
+            width: 90%;
+            max-width: 450px;
+            padding: 40px 20px;
+            margin: 40px 0;
+            position: relative;
+            z-index: 10;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            backdrop-filter: blur(5px);
+            text-align: center;
+            border: 2px solid #e0cda7; /* Soft gold border */
+            overflow: hidden; /* Contain inner moving elements */
+        }
+
+        /* Hero section - The main photo */
+        .hero {
+            position: relative;
+            margin-bottom: 30px;
+        }
+
+        /* Ornate frame for the photo */
+        .frame {
+            width: 100%;
+            padding-bottom: 100%; /* Make it square */
+            position: relative;
+            border-radius: 50%; /* Circular frame */
+            border: 8px solid #f2e7d0; /* Inner border color */
+            outline: 6px solid #d4af37; /* Outer gold outline */
+            overflow: hidden;
+            box-shadow: 0 0 25px rgba(212, 175, 55, 0.4);
+            animation: slowRotate 20s infinite linear, framePulse 3s infinite ease-in-out;
+        }
+
+        /* Photo styles */
+        .frame img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            animation: counterRotate 20s infinite linear; /* Keeps the image upright while the frame spins */
+        }
+
+        /* Moving elements around the frame */
+        .frame-ornament {
+            position: absolute;
+            background-color: #d4af37;
+            border-radius: 50%;
+            width: 15px;
+            height: 15px;
+            z-index: 5;
+        }
+        .frame-ornament-1 { top: -10px; left: calc(50% - 7.5px); }
+        .frame-ornament-2 { bottom: -10px; left: calc(50% - 7.5px); }
+        .frame-ornament-3 { top: calc(50% - 7.5px); left: -10px; }
+        .frame-ornament-4 { top: calc(50% - 7.5px); right: -10px; }
+
+        /* Anniversary count-up/timeline */
+        .timeline {
+            margin-top: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .timeline-item {
+            border: 1px solid #e0cda7;
+            border-radius: 10px;
+            padding: 15px;
+            background: #fff;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            transform: translateY(20px);
+            opacity: 0;
+            animation: slideInFade 1s forwards;
+        }
+        .timeline-item-1 { animation-delay: 0.5s; }
+        .timeline-item-2 { animation-delay: 1.0s; }
+        .timeline-item-3 { animation-delay: 1.5s; }
+
+        .timeline-item h2 {
+            font-family: 'Playfair Display', serif;
+            color: #b38b1b; /* Richer gold */
+            font-size: 2em;
+            margin-bottom: 5px;
+        }
+        .timeline-item span {
+            font-size: 0.9em;
+            color: #7a7a7a;
+            display: block;
+        }
+        .timeline-label {
+            font-weight: bold;
+            color: #4a4a4a;
+        }
+
+        /* Dynamic number animations */
+        .years-count {
+            display: inline-block;
+        }
+        .years-count span {
+            display: inline-block;
+            transition: transform 0.3s ease-out;
+        }
+
+        /* Message section */
+        .message {
+            margin-top: 30px;
+            text-align: left;
+        }
+
+        .message h1 {
+            font-family: 'Playfair Display', serif;
+            color: #b38b1b;
+            font-size: 2.2em;
+            text-align: center;
+            margin-bottom: 20px;
+            transform: translateY(30px);
+            opacity: 0;
+            animation: slideInFade 1s 2s forwards;
+        }
+
+        .message p {
+            font-size: 1.1em;
+            line-height: 1.7;
+            margin-bottom: 15px;
+            transform: translateY(30px);
+            opacity: 0;
+            animation: slideInFade 1s forwards;
+        }
+        .message p:nth-child(2) { animation-delay: 2.5s; }
+        .message p:nth-child(3) { animation-delay: 3.0s; }
+        .message p:nth-child(4) { animation-delay: 3.5s; }
+
+        /* Signature at the end */
+        .signature {
+            margin-top: 30px;
+            text-align: center;
+            transform: translateY(30px);
+            opacity: 0;
+            animation: slideInFade 1s 4s forwards;
+        }
+
+        .signature p {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 1.3em;
+            color: #4a4a4a;
+        }
+        .signature .names {
+            font-weight: bold;
+            color: #b38b1b;
+            font-size: 1.5em;
+            font-style: normal;
+        }
+        .signature .kids-names {
+            font-size: 1.2em;
+            color: #d4af37;
+            margin-top: 5px;
+            font-style: normal;
+        }
+
+        /* Animations definitions */
+        @keyframes slowRotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        @keyframes counterRotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(-360deg); }
+        }
+        @keyframes framePulse {
+            0% { outline-color: rgba(212, 175, 55, 1); box-shadow: 0 0 25px rgba(212, 175, 55, 0.4); }
+            50% { outline-color: rgba(212, 175, 55, 0.7); box-shadow: 0 0 35px rgba(212, 175, 55, 0.7); }
+            100% { outline-color: rgba(212, 175, 55, 1); box-shadow: 0 0 25px rgba(212, 175, 55, 0.4); }
+        }
+        @keyframes slideInFade {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Mobile specific adjustments */
+        @media (max-width: 480px) {
+            .container { padding: 30px 15px; }
+            .timeline-item h2 { font-size: 1.8em; }
+            .message h1 { font-size: 2em; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Particle background -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Main visual content -->
+    <div class="container">
+        <!-- Hero section with the specific photo -->
+        <div class="hero">
+            <div class="frame">
+                <!-- IMPORTANT: Ensure 'image_0fe42e.jpg' is in the exact same folder as this file -->
+                <img src="image_0fe42e.jpg" alt="Mom and Dad" />
+                <div class="frame-ornament frame-ornament-1"></div>
+                <div class="frame-ornament frame-ornament-2"></div>
+                <div class="frame-ornament frame-ornament-3"></div>
+                <div class="frame-ornament frame-ornament-4"></div>
+            </div>
+        </div>
+
+        <!-- The main celebration title (dynamic with JS) -->
+        <div class="message">
+            <h1 id="anniversaryTitle">Celebrating Your Anniversary!</h1>
+            
+            <p>To our dearest Parents,</p>
+            <p>Today is a day to celebrate not just a date, but a beautiful journey of love, commitment, and companionship. It has been <span class="years-count" id="yearsSpan">many</span> incredible years since that magical day on July 6, 2003, when your futures became one.</p>
+            <p>Your love story has been an inspiration to our family and a guiding light. We are so grateful for the life you have built and the love you share.</p>
+        </div>
+
+        <!-- Dynamic counter and timeline -->
+        <div class="timeline">
+            <div class="timeline-item timeline-item-1">
+                <h2 id="totalYears">0</h2>
+                <span><span class="timeline-label">Years of Love</span><br>Since 2003</span>
+            </div>
+            <div class="timeline-item timeline-item-2">
+                <h2 id="totalDays">0</h2>
+                <span><span class="timeline-label">Days of Happiness</span><br>Each day a memory</span>
+            </div>
+            <div class="timeline-item timeline-item-3">
+                <h2 id="totalMinutes">0</h2>
+                <span><span class="timeline-label">Minutes Shared</span><br>Eternity in moments</span>
+            </div>
+        </div>
+
+        <!-- Final message -->
+        <div class="message">
+            <p>We wish you a day filled with laughter, love, and joy, and a future even brighter than your past. Cheers to many more beautiful years together!</p>
+        </div>
+
+        <!-- Signature -->
+        <div class="signature">
+            <p>With endless love and congratulations,</p>
+            <p class="names">Your Loving Children,</p>
+            <p class="kids-names">Isshani and Parth</p>
+        </div>
+    </div>
+
+    <script>
+        // Generate floating particle elements
+        function createParticles() {
+            const container = document.getElementById('particles');
+            const particleCount = 40; 
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                const size = Math.random() * 8 + 4; 
+                const xPos = Math.random() * 100; 
+                const duration = Math.random() * 8 + 5; 
+                const delay = Math.random() * 5; 
+
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = `${xPos}%`;
+                particle.style.animationDuration = `${duration}s`;
+                particle.style.animationDelay = `${delay}s`;
+                
+                const blur = Math.random() * 2 + 1;
+                particle.style.filter = `blur(${blur}px)`;
+
+                container.appendChild(particle);
+            }
+        }
+
+        // Calculate time since the anniversary date
+        function calculateAnniversaryData() {
+            const startDate = new Date('July 6, 2003');
+            const currentDate = new Date();
+
+            let anniversaryYearCount = currentDate.getFullYear() - startDate.getFullYear();
+            if (currentDate.getMonth() < startDate.getMonth() || (currentDate.getMonth() === startDate.getMonth() && currentDate.getDate() < startDate.getDate())) {
+                anniversaryYearCount--;
+            }
+            return anniversaryYearCount;
+        }
+
+        // Precise day count calculation
+        function calculatePreciseDays() {
+            const startDate = new Date('July 6, 2003 UTC');
+            const currentDate = new Date();
+            
+            const diffInMs = currentDate.getTime() - startDate.getTime();
+            const daysCount = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
+            
+            return daysCount;
+        }
+
+        // Animated count-up for numbers
+        function animateCountUp(elementId, endValue, duration) {
+            const element = document.getElementById(elementId);
+            let startTime = null;
+
+            function step(timestamp) {
+                if (!startTime) startTime = timestamp;
+                const progress = timestamp - startTime;
+                const percentage = Math.min(progress / duration, 1);
+                
+                const currentValue = Math.floor(endValue * percentage);
+                element.innerText = currentValue.toLocaleString('en-US');
+                
+                if (percentage < 1) {
+                    requestAnimationFrame(step);
+                }
+            }
+            requestAnimationFrame(step);
+        }
+
+        // Main initialization
+        window.onload = function() {
+            createParticles();
+            
+            const anniversaryYearCount = calculateAnniversaryData();
+            const totalDaysCount = calculatePreciseDays();
+            
+            document.getElementById('anniversaryTitle').innerText = `Celebrating Your ${anniversaryYearCount}th Anniversary!`;
+            document.getElementById('yearsSpan').innerText = anniversaryYearCount;
+            
+            animateCountUp('totalYears', anniversaryYearCount, 1500); 
+            animateCountUp('totalDays', totalDaysCount, 2500); 
+            animateCountUp('totalMinutes', totalDaysCount * 24 * 60, 3000); 
+        };
+    </script>
+</body>
+</html>
